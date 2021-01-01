@@ -1,5 +1,5 @@
 from tkinter import *
-
+from tkinter import messagebox
 
 MARGIN = 20
 SIDE = 50
@@ -19,6 +19,8 @@ class SudokuUI(Frame):
         self.parent.title("Sudoku")
         self.pack(fill=BOTH, expand=1)
         self.canvas.pack(fill=BOTH, side=TOP)
+        clear_button = Button(self, text="Clear answers", command=self.__clear_answers)
+        clear_button.pack(fill=BOTH, side=BOTTOM)
         self.__draw_grid()
         self.__draw_puzzle()
         self.canvas.bind("<Button-1>", self.__cell_clicked)
@@ -84,14 +86,17 @@ class SudokuUI(Frame):
             if self.game.check_win():
                 self.__end_game()
 
+    def __clear_answers(self):
+        self.game.reset()
+        self.__draw_puzzle()
+
     def __end_game(self):
-        print("You Win!")
+        messagebox.showinfo("Sudoku Finished", "You Win!")
         return
 
 
 class SudokuGame(list):
     def __init__(self, board_file):
-        super().__init__()
         self.board = board_file
         self.game_over = False
 
@@ -149,7 +154,7 @@ if __name__ == '__main__':
         [9, 5, 3, 6, 7, 4, 1, 2, 8],
         [1, 4, 8, 9, 3, 2, 6, 5, 0]
     ]
-    sudoku_game = SudokuGame(debug_board)
+    sudoku_game = SudokuGame(temp_board)
     root = Tk()
     app = SudokuUI(root, sudoku_game)
     root.mainloop()
