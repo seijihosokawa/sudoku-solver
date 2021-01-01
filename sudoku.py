@@ -1,9 +1,12 @@
 from tkinter import *
 from tkinter import messagebox
+from boards import *
+import random
 
 MARGIN = 20
 SIDE = 50
 WIDTH = HEIGHT = MARGIN * 2 + SIDE * 9
+board_choices = [board_one, board_two, board_three, board_four, board_five, board_six]
 
 
 class SudokuUI(Frame):
@@ -181,7 +184,7 @@ class SudokuSolver(list):
             return True
         for guess in range(1, 10):
             if self.is_valid(board, guess, row, col):
-                # update board
+                # draw board
                 board[row][col] = guess
                 if self.solve_sudoku(board):
                     return True
@@ -190,29 +193,7 @@ class SudokuSolver(list):
 
 
 if __name__ == '__main__':
-    temp_board = [
-        [7, 8, 0, 4, 0, 0, 1, 2, 0],
-        [6, 0, 0, 0, 7, 5, 0, 0, 9],
-        [0, 0, 0, 6, 0, 1, 0, 7, 8],
-        [0, 0, 7, 0, 4, 0, 2, 6, 0],
-        [0, 0, 1, 0, 5, 0, 9, 3, 0],
-        [9, 0, 4, 0, 6, 0, 0, 0, 5],
-        [0, 7, 0, 3, 0, 0, 0, 1, 2],
-        [1, 2, 0, 0, 0, 7, 4, 0, 0],
-        [0, 4, 9, 2, 0, 6, 0, 0, 7]
-    ]
-    debug_board = [
-        [2, 1, 7, 3, 8, 5, 4, 6, 9],
-        [3, 8, 5, 4, 6, 9, 7, 1, 2],
-        [4, 9, 6, 7, 2, 1, 8, 3, 5],
-        [5, 2, 4, 8, 1, 6, 9, 7, 3],
-        [6, 3, 9, 5, 4, 7, 2, 8, 1],
-        [8, 7, 1, 2, 9, 3, 5, 4, 6],
-        [7, 6, 2, 1, 5, 8, 3, 9, 4],
-        [9, 5, 3, 6, 7, 4, 1, 2, 8],
-        [1, 4, 8, 9, 3, 2, 6, 5, 0]
-    ]
-    sudoku_game = SudokuGame(temp_board)
+    sudoku_game = SudokuGame(random.choice(board_choices))
     root = Tk()
     app = SudokuUI(root, sudoku_game)
     root.mainloop()
