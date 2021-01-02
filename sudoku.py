@@ -27,7 +27,7 @@ class SudokuUI(Frame):
         self.canvas.pack(fill=BOTH, side=TOP)
         clear_button = Button(self, text="New Game", command=self.__clear_answers, highlightbackground="gray")
         clear_button.pack(fill=BOTH, side=BOTTOM)
-        solve_button = Button(self, text="Solve Sudoku", command=self.solver_helper, highlightbackground="gray")
+        solve_button = Button(self, text="Solve Sudoku", command=self.__solver_helper, highlightbackground="gray")
         solve_button.pack(fill=BOTH, side=BOTTOM)
         self.__draw_grid()
         self.__draw_puzzle()
@@ -99,9 +99,10 @@ class SudokuUI(Frame):
         self.game.reset()
         self.__draw_puzzle()
 
-    def solver_helper(self):
+    def __solver_helper(self):
         SudokuSolver(self.game.board)
         self.__draw_puzzle()
+        self.__end_game()
 
     def __end_game(self):
         messagebox.showinfo("Sudoku Finished", "You Win!")
@@ -188,7 +189,6 @@ class SudokuSolver(list):
             return True
         for guess in range(1, 10):
             if self.is_valid(board, guess, row, col):
-                #SudokuUI(root, board).solver_helper()
                 board[row][col] = guess
                 if self.solve_sudoku(board):
                     return True
