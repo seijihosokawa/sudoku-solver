@@ -25,9 +25,9 @@ class SudokuUI(Frame):
         self.parent.title("Sudoku")
         self.pack(fill=BOTH, expand=1)
         self.canvas.pack(fill=BOTH, side=TOP)
-        clear_button = Button(self, text="Clear answers", command=self.__clear_answers, highlightbackground="gray")
+        clear_button = Button(self, text="New Game", command=self.__clear_answers, highlightbackground="gray")
         clear_button.pack(fill=BOTH, side=BOTTOM)
-        solve_button = Button(self, text="Solve Sudoku", command=self.__solver_helper, highlightbackground="gray")
+        solve_button = Button(self, text="Solve Sudoku", command=self.solver_helper, highlightbackground="gray")
         solve_button.pack(fill=BOTH, side=BOTTOM)
         self.__draw_grid()
         self.__draw_puzzle()
@@ -95,16 +95,16 @@ class SudokuUI(Frame):
                 self.__end_game()
 
     def __clear_answers(self):
-        # reset puzzle
+        self.canvas.delete("numbers")
+        self.game.reset()
         self.__draw_puzzle()
 
-    def __solver_helper(self):
+    def solver_helper(self):
         SudokuSolver(self.game.board)
         self.__draw_puzzle()
 
     def __end_game(self):
         messagebox.showinfo("Sudoku Finished", "You Win!")
-        return
 
 
 class SudokuGame(list):
@@ -116,6 +116,10 @@ class SudokuGame(list):
         super().__init__()
         self.board = board_file
         self.game_over = False
+
+    def reset(self):
+        self.game_over = False
+        self.board = random.choice(board_choices)
 
     def check_win(self):
         for row in range(9):
@@ -184,7 +188,7 @@ class SudokuSolver(list):
             return True
         for guess in range(1, 10):
             if self.is_valid(board, guess, row, col):
-                # draw board
+                #SudokuUI(root, board).solver_helper()
                 board[row][col] = guess
                 if self.solve_sudoku(board):
                     return True
@@ -195,5 +199,5 @@ class SudokuSolver(list):
 if __name__ == '__main__':
     sudoku_game = SudokuGame(random.choice(board_choices))
     root = Tk()
-    app = SudokuUI(root, sudoku_game)
+    SudokuUI(root, sudoku_game)
     root.mainloop()
